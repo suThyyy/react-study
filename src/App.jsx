@@ -1,32 +1,30 @@
 import { useState } from "react";
 
-function UserCard({ name, age }) {
-  const [currentAge, setAge] = useState(age);
+function ScoreDisplay({ score }) {
   return (
-    <div className="usercard">
-      <div className="name">{name}</div>
-      <div className="age"> {currentAge} </div>
-      <button
-        className="inc-age"
-        onClick={() => setAge((currentAge) => currentAge + 1)}
-      >
-        + 1 tuổi
-      </button>
-      <button
-        className="dec-age"
-        onClick={() => setAge((currentAge) => currentAge - 1)}
-      >
-        -1 tuổi
-      </button>
+    <div>
+      <div className="score-display">{score}</div>
     </div>
   );
 }
 
+function ScoreButton({ onButtonClick }) {
+  return (
+    <button className="inc-score" onClick={onButtonClick}>
+      +1
+    </button>
+  );
+}
+
 function App() {
+  const [score, setScore] = useState(0);
+  function handleBtnClick() {
+    setScore((prev) => prev + 1);
+  }
   return (
     <>
-      <UserCard name="Vu" age={22} />
-      <UserCard name="Nam" age={23} />
+      <ScoreDisplay score={score} />
+      <ScoreButton onButtonClick={handleBtnClick} />
     </>
   );
 }
