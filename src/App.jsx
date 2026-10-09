@@ -1,48 +1,28 @@
 import { useState } from "react";
 
-function ProductItem({ product, sum }) {
-  const [quantity, setQuantity] = useState(0);
-  function calcQuantity() {
-    setQuantity((prev) => prev + 1);
-    sum();
-  }
+function NameInput({ name, setName }) {
   return (
     <div>
-      <span>Product Name: {product} </span>
-      <span>Quantity: {quantity} </span>
-      <button onClick={calcQuantity}>Add</button>
+      <input
+        type="text"
+        value={name}
+        onChange={(e) => setName(e.target.value)}
+      />
     </div>
   );
 }
 
-function ProductList({ products, sum }) {
-  return (
-    <div>
-      {products.map((product, index) => (
-        <ProductItem key={index} product={product} sum={sum} />
-      ))}
-    </div>
-  );
-}
-
-function TotalQuantity({ total }) {
-  return (
-    <div>
-      <span>Total: {total}</span>
-    </div>
-  );
+function NameDisplay({ name }) {
+  return <div>Text: {name}</div>;
 }
 
 function App() {
-  const products = ["Laptop", "Phone", "Tablet"];
-  const [totalQuantities, setTotalQuan] = useState(0);
-  function sumQuantities() {
-    setTotalQuan((prev) => prev + 1);
-  }
+  const [name, setName] = useState("");
+
   return (
     <>
-      <TotalQuantity total={totalQuantities} />
-      <ProductList products={products} sum={sumQuantities} />
+      <NameInput name={name} setName={setName} />
+      <NameDisplay name={name} />
     </>
   );
 }
