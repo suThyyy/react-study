@@ -1,33 +1,41 @@
 import { useState } from "react";
 
-function SelectedProduct({ product }) {
-  return (
-    <div>{product ? `Selected product: ${product}` : "Chua chon san pham"}</div>
-  );
-}
-
-function ProductList({ products, onSelectProduct }) {
+function TodoItem({ todo, deleteTodo }) {
   return (
     <div>
-      {products.map((product, index) => (
-        <button key={index} onClick={() => onSelectProduct(product)}>
-          {product}
-        </button>
-      ))}
+      {todo}
+      <button onClick={() => deleteTodo(todo)}>Delete</button>
     </div>
   );
 }
 
-function App() {
-  const products = ["Laptop", "Phone", "Tablet"];
-  const [product, selectProduct] = useState("");
-  function onSelectProduct(product) {
-    selectProduct(product);
-  }
+function TodoList({ todos, deleteTodo }) {
   return (
     <>
-      <SelectedProduct product={product} />
-      <ProductList products={products} onSelectProduct={onSelectProduct} />
+      {todos.map((todo, index) => (
+        <TodoItem key={index} todo={todo} deleteTodo={deleteTodo} />
+      ))}
+    </>
+  );
+}
+
+function App() {
+  const [todos, setTodos] = useState([
+    "study",
+    "report",
+    "fix bug",
+    "dating",
+    "hanging out",
+    "preparing meals",
+  ]);
+
+  function deleteTodo(todoToDelete) {
+    setTodos((prev) => prev.filter((todo) => todo !== todoToDelete));
+  }
+
+  return (
+    <>
+      <TodoList todos={todos} deleteTodo={deleteTodo} />
     </>
   );
 }
