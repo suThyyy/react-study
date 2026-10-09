@@ -1,41 +1,39 @@
 import { useState } from "react";
 
-function TodoItem({ todo, deleteTodo }) {
+function SumLike({ likes }) {
+  return <div>Sumdsadsasds: {likes}</div>;
+}
+function PostCard({ heading, getSumLikes }) {
+  const [like, setLike] = useState(0);
+
+  function increaseLike() {
+    setLike((prev) => prev + 1);
+    getSumLikes();
+  }
+
   return (
     <div>
-      {todo}
-      <button onClick={() => deleteTodo(todo)}>Delete</button>
+      <h1>{heading}</h1>
+
+      <p>Lorem ipsum dolor sit amet...</p>
+
+      <button onClick={increaseLike}>Like: {like}</button>
     </div>
   );
 }
 
-function TodoList({ todos, deleteTodo }) {
-  return (
-    <>
-      {todos.map((todo, index) => (
-        <TodoItem key={index} todo={todo} deleteTodo={deleteTodo} />
-      ))}
-    </>
-  );
-}
-
 function App() {
-  const [todos, setTodos] = useState([
-    "study",
-    "report",
-    "fix bug",
-    "dating",
-    "hanging out",
-    "preparing meals",
-  ]);
-
-  function deleteTodo(todoToDelete) {
-    setTodos((prev) => prev.filter((todo) => todo !== todoToDelete));
+  const [likes, setLikes] = useState(0);
+  function getSumLikes() {
+    setLikes((prev) => prev + 1);
+    console.log("getsumlike");
   }
-
   return (
     <>
-      <TodoList todos={todos} deleteTodo={deleteTodo} />
+      <PostCard getSumLikes={getSumLikes} heading={"Tin moi nhat"} />
+      <PostCard getSumLikes={getSumLikes} heading={"Nong hoi"} />
+      <PostCard getSumLikes={getSumLikes} heading={"Hay lam"} />
+      <SumLike likes={likes} />
     </>
   );
 }
