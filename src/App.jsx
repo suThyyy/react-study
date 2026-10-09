@@ -1,20 +1,28 @@
 import { useState } from "react";
 
-function SelectedProduct() {
-  return <div></div>;
+function ColorDisplay({ color }) {
+  return <div>current color: {color}</div>;
 }
 
-function ProductList() {
-  return <div></div>;
+function ColorButtons({ handleClick }) {
+  return (
+    <div>
+      <button onClick={() => handleClick("red")}>Red</button>
+      <button onClick={() => handleClick("blue")}>Blue</button>
+      <button onClick={() => handleClick("green")}>Green</button>
+    </div>
+  );
 }
 
 function App() {
-  const products = ["Laptop", "Phone", "Tablet"];
-
+  const [color, setColor] = useState("red");
+  function handleClick(color) {
+    setColor(color);
+  }
   return (
     <>
-      <SelectedProduct />
-      <ProductList />
+      <ColorDisplay color={color} />
+      <ColorButtons handleClick={handleClick} />
     </>
   );
 }
