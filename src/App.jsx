@@ -1,41 +1,41 @@
 import { useState } from "react";
-
-function SumLike({ likes }) {
-  return <div>Sumdsadsasds: {likes}</div>;
-}
-function PostCard({ heading, getSumLikes }) {
-  const [like, setLike] = useState(0);
-
-  function increaseLike() {
-    setLike((prev) => prev + 1);
-    getSumLikes();
-  }
-
+function UserList({ users, onSelectUser }) {
   return (
     <div>
-      <h1>{heading}</h1>
+      {users.map((user) => (
+        <button key={user.id} onClick={() => onSelectUser(user)}>
+          {user.name}
+        </button>
+      ))}
+    </div>
+  );
+}
 
-      <p>Lorem ipsum dolor sit amet...</p>
-
-      <button onClick={increaseLike}>Like: {like}</button>
+function UserDetail({ selectedUser }) {
+  if (!selectedUser) {
+    return <div>Chưa chọn user</div>;
+  }
+  return (
+    <div>
+      <span>Name: {selectedUser.name}</span>
+      <span>Age: {selectedUser.age}</span>
     </div>
   );
 }
 
 function App() {
-  const [likes, setLikes] = useState(0);
-  function getSumLikes() {
-    setLikes((prev) => prev + 1);
-    console.log("getsumlike");
-  }
+  const users = [
+    { id: 1, name: "Vu", age: 22 },
+    { id: 2, name: "Nam", age: 23 },
+    { id: 3, name: "An", age: 20 },
+  ];
+  const [selectedUser, setUser] = useState(null);
+
   return (
     <>
-      <PostCard getSumLikes={getSumLikes} heading={"Tin moi nhat"} />
-      <PostCard getSumLikes={getSumLikes} heading={"Nong hoi"} />
-      <PostCard getSumLikes={getSumLikes} heading={"Hay lam"} />
-      <SumLike likes={likes} />
+      <UserList users={users} onSelectUser={setUser} />
+      <UserDetail selectedUser={selectedUser} />
     </>
   );
 }
-
 export default App;
