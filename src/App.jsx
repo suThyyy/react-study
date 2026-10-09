@@ -1,41 +1,50 @@
 import { useState } from "react";
-function UserList({ users, onSelectUser }) {
+
+function ProductItem({ product, sum }) {
+  const [quantity, setQuantity] = useState(0);
+  function calcQuantity() {
+    setQuantity((prev) => prev + 1);
+    sum();
+  }
   return (
     <div>
-      {users.map((user) => (
-        <button key={user.id} onClick={() => onSelectUser(user)}>
-          {user.name}
-        </button>
+      <span>Product Name: {product} </span>
+      <span>Quantity: {quantity} </span>
+      <button onClick={calcQuantity}>Add</button>
+    </div>
+  );
+}
+
+function ProductList({ products, sum }) {
+  return (
+    <div>
+      {products.map((product, index) => (
+        <ProductItem key={index} product={product} sum={sum} />
       ))}
     </div>
   );
 }
 
-function UserDetail({ selectedUser }) {
-  if (!selectedUser) {
-    return <div>Chưa chọn user</div>;
-  }
+function TotalQuantity({ total }) {
   return (
     <div>
-      <span>Name: {selectedUser.name}</span>
-      <span>Age: {selectedUser.age}</span>
+      <span>Total: {total}</span>
     </div>
   );
 }
 
 function App() {
-  const users = [
-    { id: 1, name: "Vu", age: 22 },
-    { id: 2, name: "Nam", age: 23 },
-    { id: 3, name: "An", age: 20 },
-  ];
-  const [selectedUser, setUser] = useState(null);
-
+  const products = ["Laptop", "Phone", "Tablet"];
+  const [totalQuantities, setTotalQuan] = useState(0);
+  function sumQuantities() {
+    setTotalQuan((prev) => prev + 1);
+  }
   return (
     <>
-      <UserList users={users} onSelectUser={setUser} />
-      <UserDetail selectedUser={selectedUser} />
+      <TotalQuantity total={totalQuantities} />
+      <ProductList products={products} sum={sumQuantities} />
     </>
   );
 }
+
 export default App;
