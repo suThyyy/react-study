@@ -1,23 +1,23 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 
 function App() {
-  const [seconds, setSeconds] = useState(0);
+  const [x, setX] = useState(0);
 
   useEffect(() => {
-    const timer = setInterval(() => {
-      setSeconds((prev) => prev + 1);
-    }, 1000);
+    function handleMouseMove(e) {
+      // cập nhật x bằng vị trí chuột theo chiều ngang
+      setX(e.clientX);
+    }
 
+    // thêm listener mousemove
+    window.addEventListener("mousemove", handleMouseMove);
     return () => {
-      clearInterval(timer);
+      // xóa listener
+      window.removeEventListener("mousemove", handleMouseMove);
     };
   }, []);
 
-  useEffect(() => {
-    console.log(seconds);
-  }, [seconds]);
-
-  return <p>Seconds: {seconds}</p>;
+  return <p>Mouse X: {x}</p>;
 }
 
 export default App;
