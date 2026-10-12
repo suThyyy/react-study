@@ -10,23 +10,40 @@ function App() {
     // https://jsonplaceholder.typicode.com/users
     // nếu lỗi -> setError
     // cuối cùng -> setLoading(false)
-    fetch("https://jsonplaceholder.typicode.com/users")
-      .then((response) => {
+    // fetch("https://jsonplaceholder.typicode.com/users")
+    //   .then((response) => {
+    //     if (!response.ok) {
+    //       throw new Error("Fetch failed");
+    //     }
+
+    //     return response.json();
+    //   })
+    //   .then((data) => {
+    //     setUsers(data);
+    //   })
+    //   .catch((err) => {
+    //     setError(err.message);
+    //   })
+    //   .finally(() => {
+    //     setLoading(false);
+    //   });
+    async function getUsers() {
+      try {
+        const response = await fetch(
+          "https://jsonplaceholder.typicode.com/users",
+        );
         if (!response.ok) {
           throw new Error("Fetch failed");
         }
-
-        return response.json();
-      })
-      .then((data) => {
+        const data = await response.json();
         setUsers(data);
-      })
-      .catch((err) => {
+      } catch (err) {
         setError(err.message);
-      })
-      .finally(() => {
+      } finally {
         setLoading(false);
-      });
+      }
+    }
+    getUsers();
   }, []);
 
   if (loading) {
