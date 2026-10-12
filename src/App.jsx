@@ -1,38 +1,34 @@
-import { createContext, useContext, useState } from "react";
+import { useState } from "react";
 
-const ThemeContext = createContext();
+function useCounter() {
+  // tự viết
+  const [count, setCount] = useState(0);
 
-function ThemeButton() {
-  const { theme, setTheme } = useContext(ThemeContext);
-
-  function toggleTheme() {
-    setTheme((prev) => (prev === "light" ? "dark" : "light"));
+  function increase() {
+    setCount((prev) => prev + 1);
   }
 
-  return <button onClick={toggleTheme}>Current Theme: {theme}</button>;
+  function decrease() {
+    setCount((prev) => prev - 1);
+  }
+  return { count, increase, decrease };
 }
 
-function Toolbar() {
+function Counter() {
+  // gọi useCounter
+  const { count, increase, decrease } = useCounter();
+
   return (
     <div>
-      <ThemeButton />
+      <div>Count: {count} </div>
+      <button onClick={increase}>Increase</button>
+      <button onClick={decrease}>Decrease</button>
     </div>
   );
 }
 
 function App() {
-  const [theme, setTheme] = useState("light");
-
-  return (
-    <ThemeContext.Provider
-      value={{
-        theme,
-        setTheme,
-      }}
-    >
-      <Toolbar />
-    </ThemeContext.Provider>
-  );
+  return <Counter />;
 }
 
 export default App;
