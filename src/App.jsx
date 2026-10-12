@@ -4,18 +4,18 @@ function App() {
   const [seconds, setSeconds] = useState(0);
 
   useEffect(() => {
-    // tạo interval 1 giây
-    // mỗi lần chạy thì seconds + 1
-    // return cleanup
-    // clear interval
     const timer = setInterval(() => {
-      console.log(seconds);
       setSeconds((prev) => prev + 1);
     }, 1000);
+
     return () => {
       clearInterval(timer);
     };
   }, []);
+
+  useEffect(() => {
+    console.log(seconds);
+  }, [seconds]);
 
   return <p>Seconds: {seconds}</p>;
 }
