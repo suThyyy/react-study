@@ -22,9 +22,18 @@ function UserInfo({ user }) {
     </div>
   );
 }
+function ErrorMessage({ message }) {
+  if (!message) return null;
+
+  return <div>{message}</div>;
+}
 
 function App() {
   const [form, setForm] = useState({
+    name: "",
+    email: "",
+  });
+  const [errors, setErrors] = useState({
     name: "",
     email: "",
   });
@@ -37,12 +46,25 @@ function App() {
       ...prev,
       [e.target.name]: e.target.value,
     }));
+    setErrors((prev) => ({
+      ...prev,
+      [e.target.name]: "",
+    }));
   }
 
   function handleSubmit(e) {
     // tự viết
     e.preventDefault();
-    setSubmittedUser(form);
+    const newErrors = { name: "", email: "" };
+    if (form.name.trim() === "") {
+      newErrors.name = "Name is required";
+    }
+    if (!form.email.includes("@")) {
+      newErrors.email = "Email is invalid";
+    }
+    setErrors(newErrors);
+    if (newErrors.name === "" && newErrors.email === "") setSubmittedUser(form);
+    else setSubmittedUser(null);
   }
 
   return (
@@ -50,6 +72,8 @@ function App() {
       <UserForm form={form} onChange={handleChange} onSubmit={handleSubmit} />
 
       <UserInfo user={submittedUser} />
+      <ErrorMessage message={errors.name} />
+      <ErrorMessage message={errors.email} />
     </>
   );
 }
