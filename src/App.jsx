@@ -28,6 +28,20 @@ function ErrorMessage({ message }) {
   return <div>{message}</div>;
 }
 
+function Status({ isLoggedIn, onLogOut }) {
+  return (
+    <div>
+      {isLoggedIn ? (
+        <div>
+          <p>Status: Logged in</p> <button onClick={onLogOut}>Log Out</button>
+        </div>
+      ) : (
+        <p>Not Logged In, Please Log in</p>
+      )}
+    </div>
+  );
+}
+
 function App() {
   const [form, setForm] = useState({
     name: "",
@@ -40,6 +54,8 @@ function App() {
 
   const [submittedUser, setSubmittedUser] = useState(null);
 
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
   function handleChange(e) {
     // tự viết
     setForm((prev) => ({
@@ -50,6 +66,8 @@ function App() {
       ...prev,
       [e.target.name]: "",
     }));
+    console.log("name:", e.target.name);
+    console.log("value:", e.target.value);
   }
 
   function handleSubmit(e) {
@@ -63,8 +81,18 @@ function App() {
       newErrors.email = "Email is invalid";
     }
     setErrors(newErrors);
-    if (newErrors.name === "" && newErrors.email === "") setSubmittedUser(form);
-    else setSubmittedUser(null);
+    if (newErrors.name === "" && newErrors.email === "") {
+      setSubmittedUser(form);
+      setIsLoggedIn(true);
+    } else {
+      setSubmittedUser(null);
+      setIsLoggedIn(false);
+    }
+  }
+
+  function handleLogOut() {
+    setIsLoggedIn(false);
+    setSubmittedUser(null);
   }
 
   return (
@@ -72,6 +100,7 @@ function App() {
       <UserForm form={form} onChange={handleChange} onSubmit={handleSubmit} />
 
       <UserInfo user={submittedUser} />
+      <Status isLoggedIn={isLoggedIn} onLogOut={handleLogOut} />
       <ErrorMessage message={errors.name} />
       <ErrorMessage message={errors.email} />
     </>
