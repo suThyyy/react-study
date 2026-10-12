@@ -1,87 +1,37 @@
-import { useEffect, useState } from "react";
-import {
-  BrowserRouter,
-  Routes,
-  Route,
-  Link,
-  useParams,
-} from "react-router-dom";
+import { createContext, useContext, useState } from "react";
 
-function Home() {
-  return (
-    <div>
-      <h1>Users</h1>
+const ThemeContext = createContext();
 
-      <Link to="/users/1">User 1</Link>
-      <br />
+function ThemeButton() {
+  const { theme, setTheme } = useContext(ThemeContext);
 
-      <Link to="/users/2">User 2</Link>
-      <br />
+  function toggleTheme() {
+    setTheme((prev) => (prev === "light" ? "dark" : "light"));
+  }
 
-      <Link to="/users/3">User 3</Link>
-    </div>
-  );
+  return <button onClick={toggleTheme}>Current Theme: {theme}</button>;
 }
 
-function UserDetail() {
-  const { id } = useParams();
-
-  const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
-
-  useEffect(() => {
-    // tự viết fetch theo id
-    async function getUser() {
-      try {
-        setLoading(true);
-        setError("");
-        const response = await fetch(
-          `https://jsonplaceholder.typicode.com/users/${id}`,
-        );
-        if (!response.ok) {
-          throw new Error("Fetch failed");
-        }
-
-        const data = await response.json();
-
-        setUser(data);
-      } catch (err) {
-        setError(err.message);
-      } finally {
-        setLoading(false);
-      }
-    }
-    getUser();
-  }, [id]);
-
+function Toolbar() {
   return (
     <div>
-      <Link to="/">Back</Link>
-
-      {/* loading */ loading && <p>Loading...</p>}
-      {/* error */ error && <p>Error:{error} </p>}
-      {
-        /* user */ !loading && !error && user && (
-          <div>
-            <h2>{user.name}</h2>
-            <h2>{user.email} </h2>
-          </div>
-        )
-      }
+      <ThemeButton />
     </div>
   );
 }
 
 function App() {
-  return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Home />} />
+  const [theme, setTheme] = useState("light");
 
-        <Route path="/users/:id" element={<UserDetail />} />
-      </Routes>
-    </BrowserRouter>
+  return (
+    <ThemeContext.Provider
+      value={{
+        theme,
+        setTheme,
+      }}
+    >
+      <Toolbar />
+    </ThemeContext.Provider>
   );
 }
 
