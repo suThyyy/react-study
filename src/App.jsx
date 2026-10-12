@@ -1,18 +1,23 @@
 import { useState, useEffect } from "react";
 
 function App() {
-  const [count, setCount] = useState(0);
+  const [seconds, setSeconds] = useState(0);
 
   useEffect(() => {
-    document.title = `Count:${count} `;
-  }, [count]);
+    // tạo interval 1 giây
+    // mỗi lần chạy thì seconds + 1
+    // return cleanup
+    // clear interval
+    const timer = setInterval(() => {
+      console.log(seconds);
+      setSeconds((prev) => prev + 1);
+    }, 1000);
+    return () => {
+      clearInterval(timer);
+    };
+  }, []);
 
-  return (
-    <>
-      <p>{count}</p>
-      <button onClick={() => setCount((prev) => prev + 1)}>Add</button>
-    </>
-  );
+  return <p>Seconds: {seconds}</p>;
 }
 
 export default App;
