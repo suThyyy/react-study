@@ -1,50 +1,37 @@
 import { useEffect, useState } from "react";
 
 function App() {
-  const [users, setUsers] = useState([]);
+  const [userId, setUserId] = useState(1);
+  const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
   useEffect(() => {
-    // fetch:
-    // https://jsonplaceholder.typicode.com/users
-    // nếu lỗi -> setError
-    // cuối cùng -> setLoading(false)
-    // fetch("https://jsonplaceholder.typicode.com/users")
-    //   .then((response) => {
-    //     if (!response.ok) {
-    //       throw new Error("Fetch failed");
-    //     }
-
-    //     return response.json();
-    //   })
-    //   .then((data) => {
-    //     setUsers(data);
-    //   })
-    //   .catch((err) => {
-    //     setError(err.message);
-    //   })
-    //   .finally(() => {
-    //     setLoading(false);
-    //   });
-    async function getUsers() {
+    async function getUser() {
       try {
+        setLoading(true);
+        setError("");
+
         const response = await fetch(
-          "https://jsonplaceholder.typicode.com/users",
+          `https://jsonplaceholder.typicode.com/users/${userId}`,
         );
+
         if (!response.ok) {
           throw new Error("Fetch failed");
         }
+
         const data = await response.json();
-        setUsers(data);
+
+        setUser(data);
       } catch (err) {
         setError(err.message);
       } finally {
         setLoading(false);
       }
     }
-    getUsers();
-  }, []);
+
+    getUser();
+  }, [userId]);
 
   if (loading) {
     return <p>Loading...</p>;
@@ -55,13 +42,27 @@ function App() {
   }
 
   return (
-    <div>
+    <>
+      <input
+        type="number"
+        value={userId}
+        onChange={(e) => {
+          // tự viết
+          setUserId(Number(e.target.value));
+        }}
+      />
+
+      {/* loading */ loading && <p>Loading...</p>}
+      {/* error */ error && <p>Error:{error} </p>}
       {
-        /* map users ra tên */ users.map((user) => (
-          <p key={user.id}>{user.name}</p>
-        ))
+        /* user */ !loading && !error && user && (
+          <div>
+            <h2>{user.name}</h2>
+            <h2>{user.email} </h2>
+          </div>
+        )
       }
-    </div>
+    </>
   );
 }
 
