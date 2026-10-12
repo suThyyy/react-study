@@ -1,32 +1,36 @@
-import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  Link,
+  useParams,
+} from "react-router-dom";
 
 function Home() {
-  return <h1>Home</h1>;
+  return (
+    <>
+      <h1>Home</h1>
+
+      <Link to="/users/1">User 1</Link>
+      <br />
+      <Link to="/users/2">User 2</Link>
+    </>
+  );
 }
 
-function About() {
-  return <h1>About</h1>;
-}
+function UserDetail() {
+  const { id } = useParams();
 
-function Contact() {
-  return <h1>Contact</h1>;
+  return <h1>User ID: {id}</h1>;
 }
 
 function App() {
   return (
     <BrowserRouter>
-      <nav>
-        <Link to="/">Home</Link>
-        {" | "}
-        <Link to="/about">About</Link>
-        {" | "}
-        <Link to="/contact">Contact</Link>
-      </nav>
-
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/about" element={<About />} />
-        <Route path="/contact" element={<Contact />} />
+
+        <Route path="/users/:id" element={<UserDetail />} />
       </Routes>
     </BrowserRouter>
   );
