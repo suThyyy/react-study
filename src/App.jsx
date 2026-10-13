@@ -1,47 +1,54 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
-function useWindowWidth() {
-  const [width, setWidth] = useState(window.innerWidth);
+function useToggle(initialValue) {
+  // tự viết
+  const [value, setValue] = useState(initialValue);
 
-  useEffect(() => {
-    function handleResize() {
-      setWidth(window.innerWidth);
-    }
-
-    window.addEventListener("resize", handleResize);
-
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
-
-  return width;
+  function toggle() {
+    setValue((prev) => !prev);
+  }
+  return { value, toggle };
 }
 
-function Header() {
-  const width = useWindowWidth();
+function Menu() {
+  const { value, toggle } = useToggle(false);
 
-  return <h2>Header width: {width}</h2>;
+  return (
+    <>
+      <button onClick={toggle}>Menu</button>
+      {value && <p>Menu opened</p>}
+    </>
+  );
 }
 
-function Sidebar() {
-  const width = useWindowWidth();
+function Modal() {
+  const { value, toggle } = useToggle(false);
 
-  return <h2>Sidebar width: {width}</h2>;
+  return (
+    <>
+      <button onClick={toggle}>Modal</button>
+      {value && <p>Modal opened</p>}
+    </>
+  );
 }
 
-function Footer() {
-  const width = useWindowWidth();
+function Password() {
+  const { value, toggle } = useToggle(false);
 
-  return <h2>Footer width: {width}</h2>;
+  return (
+    <>
+      <button onClick={toggle}>Show Password</button>
+      <p>{value ? "123456" : "******"}</p>
+    </>
+  );
 }
 
 function App() {
   return (
     <>
-      <Header />
-      <Sidebar />
-      <Footer />
+      <Menu />
+      <Modal />
+      <Password />
     </>
   );
 }
