@@ -1,34 +1,49 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-function useCounter() {
-  // tự viết
-  const [count, setCount] = useState(0);
+function useWindowWidth() {
+  const [width, setWidth] = useState(window.innerWidth);
 
-  function increase() {
-    setCount((prev) => prev + 1);
-  }
+  useEffect(() => {
+    function handleResize() {
+      setWidth(window.innerWidth);
+    }
 
-  function decrease() {
-    setCount((prev) => prev - 1);
-  }
-  return { count, increase, decrease };
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
+  return width;
 }
 
-function Counter() {
-  // gọi useCounter
-  const { count, increase, decrease } = useCounter();
+function Header() {
+  const width = useWindowWidth();
 
-  return (
-    <div>
-      <div>Count: {count} </div>
-      <button onClick={increase}>Increase</button>
-      <button onClick={decrease}>Decrease</button>
-    </div>
-  );
+  return <h2>Header width: {width}</h2>;
+}
+
+function Sidebar() {
+  const width = useWindowWidth();
+
+  return <h2>Sidebar width: {width}</h2>;
+}
+
+function Footer() {
+  const width = useWindowWidth();
+
+  return <h2>Footer width: {width}</h2>;
 }
 
 function App() {
-  return <Counter />;
+  return (
+    <>
+      <Header />
+      <Sidebar />
+      <Footer />
+    </>
+  );
 }
 
 export default App;
