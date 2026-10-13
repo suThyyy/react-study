@@ -1,78 +1,31 @@
-import { useEffect, useState } from "react";
-
-function useFetch(url) {
-  const [data, setData] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
-
-  useEffect(() => {
-    // tự viết fetch ở đây
-    async function getData() {
-      try {
-        const response = await fetch(`${url}`);
-        if (!response.ok) {
-          throw new Error("Fetch failed");
-        }
-        const result = await response.json();
-        setData(result);
-      } catch (err) {
-        setError(err.message);
-      } finally {
-        setLoading(false);
-      }
-    }
-    getData();
-  }, [url]);
-
-  return {
-    data,
-    loading,
-    error,
-  };
-}
-
-function Users() {
-  const { data, loading, error } = useFetch(
-    "https://jsonplaceholder.typicode.com/users",
-  );
-
-  if (loading) return <p>Loading users...</p>;
-  if (error) return <p>Error: {error}</p>;
-
-  return (
-    <div>
-      {data?.map((user) => (
-        <p key={user.id}>{user.name}</p>
-      ))}
-    </div>
-  );
-}
-
-function Posts() {
-  const { data, loading, error } = useFetch(
-    "https://jsonplaceholder.typicode.com/posts",
-  );
-
-  if (loading) return <p>Loading posts...</p>;
-  if (error) return <p>Error: {error}</p>;
-
-  return (
-    <div>
-      {data?.slice(0, 5).map((post) => (
-        <p key={post.id}>{post.title}</p>
-      ))}
-    </div>
-  );
-}
+import { useMemo, useState } from "react";
 
 function App() {
+  const [number, setNumber] = useState(1);
+  const [count, setCount] = useState(0);
+
+  // dùng useMemo để tính:
+  // doubled = number * 2
+  // chỉ tính lại khi number đổi
+
+  const doubled = useMemo(() => {
+    console.log("Tính lại...");
+    return number * 2;
+  }, [number]);
+
   return (
     <>
-      <h1>Users</h1>
-      <Users />
+      <p>Number: {number}</p>
+      <p>Count: {count}</p>
+      <p>Doubled: {/* ... */ doubled}</p>
 
-      <h1>Posts</h1>
-      <Posts />
+      <button onClick={() => setNumber((prev) => prev + 1)}>
+        Increase Number
+      </button>
+
+      <button onClick={() => setCount((prev) => prev + 1)}>
+        Increase Count
+      </button>
     </>
   );
 }
