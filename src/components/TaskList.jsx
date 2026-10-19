@@ -1,6 +1,9 @@
+import { memo } from "react";
 import TaskItem from "./TaskItem";
 
-function TaskList({ tasks, onDelete, onToggle }) {
+const TaskList = memo(function TaskList({ tasks, onDelete, onToggle }) {
+  console.log("TaskList render");
+
   return (
     <div className="grid gap-4 md:grid-cols-2">
       {tasks.map((task) => (
@@ -13,6 +16,6 @@ function TaskList({ tasks, onDelete, onToggle }) {
       ))}
     </div>
   );
-}
+});
 
 export default TaskList;
