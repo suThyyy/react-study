@@ -1,13 +1,14 @@
-const API_URL = "https://jsonplaceholder.typicode.com/todos";
+const API_URL = `${import.meta.env.VITE_API_BASE_URL}/api/todotasks`;
 
 export async function getTasks() {
-  const response = await fetch(`${API_URL}?_limit=5`);
+  const response = await fetch(API_URL);
 
   if (!response.ok) {
-    throw new Error("Get todos failed");
+    throw new Error(`Get todotasks failed: ${response.status}`);
   }
+  const data = await response.json();
 
-  return response.json();
+  return data;
 }
 
 export async function getTaskById(id) {
@@ -36,16 +37,36 @@ export async function createTask(task) {
 
 export async function updateTask(id, updatedData) {
   const response = await fetch(`${API_URL}/${id}`, {
-    method: "PATCH",
+    method: "PUT",
     headers: {
       "Content-Type": "application/json",
     },
     body: JSON.stringify(updatedData),
   });
+
   if (!response.ok) {
-    throw new Error("Update task failed");
+    throw new Error(`Update task failed: ${response.status}`);
   }
-  return response.json();
+
+  const text = await response.text();
+
+  return text ? JSON.parse(text) : null;
+}
+
+export async function updateTaskStatus(id, completed) {
+  const response = await fetch(`${API_URL}/${id}/status`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ completed }),
+  });
+
+  if (!response.ok) {
+    throw new Error(`Update task status failed: ${response.status}`);
+  }
+
+  return response.status === 204 ? null : response.json();
 }
 
 export async function deleteTask(id) {

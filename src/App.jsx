@@ -5,6 +5,7 @@ import TasksPage from "./pages/TasksPage";
 import TaskDetailPage from "./pages/TaskDetailPage";
 import NotFoundPage from "./pages/NotFoundPage";
 import Navbar from "./components/Navbar";
+import EditTaskPage from "./pages/EditTaskPage";
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
         <Route path="/tasks" element={<TasksPage />} />
         <Route path="/tasks/:id" element={<TaskDetailPage />} />
         <Route path="*" element={<NotFoundPage />} />
+        <Route path="/tasks/:id/edit" element={<EditTaskPage />} />
       </Routes>
     </BrowserRouter>
   );

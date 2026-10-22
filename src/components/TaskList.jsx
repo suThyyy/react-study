@@ -1,7 +1,14 @@
 import { memo } from "react";
 import TaskItem from "./TaskItem";
 
-const TaskList = memo(function TaskList({ tasks, onDelete, onToggle }) {
+const TaskList = memo(function TaskList({
+  tasks,
+  users,
+  categories,
+  onDelete,
+  onToggle,
+  onEdit,
+}) {
   console.log("TaskList render");
 
   return (
@@ -10,8 +17,11 @@ const TaskList = memo(function TaskList({ tasks, onDelete, onToggle }) {
         <TaskItem
           key={task.id}
           task={task}
+          users={users}
+          categories={categories}
           onDelete={onDelete}
           onToggle={onToggle}
+          onEdit={onEdit}
         />
       ))}
     </div>
